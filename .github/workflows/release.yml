@@ -1,0 +1,39 @@
+name: Build release
+
+on:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Dependance
+      run: rustup target add wasm32-wasip1
+    - name: Build
+      run: cargo build --target wasm32-wasip1 --release
+    - name: Upload release artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: pleiad_cdpr
+        path: target/wasm32-wasip1/release/pleiad_cdpr.wasm
+    - name: Deploy to GitHub
+      uses: actions/upload-artifact@v3
+      with:
+        path: target/wasm32-wasip1/release/pleiad_cdpr.wasm
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - name: Download release artifact
+      uses: actions/download-artifact@v5
+      with:
+        name: pleiad_cdpr
+        path: ./pleiad_cdpr
+    - name: Publish built binary to GitHub releases
+      run: |
+          gh release create --generate-notes ./pleiad_cdpr/pleiad_cdpr.wasm
