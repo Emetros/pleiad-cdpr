@@ -20,10 +20,6 @@ jobs:
       with:
         name: pleiad_cdpr
         path: target/wasm32-wasip1/release/pleiad_cdpr.wasm
-    - name: Deploy to GitHub
-      uses: actions/upload-artifact@v3
-      with:
-        path: target/wasm32-wasip1/release/pleiad_cdpr.wasm
 
   release:
     runs-on: ubuntu-latest
