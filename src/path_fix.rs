@@ -1,5 +1,5 @@
 use std::{
-    ffi::{CStr, CString, c_char},
+    ffi::{CStr, c_char},
     fs::{self, create_dir_all, remove_dir_all, remove_file},
     mem,
     path::Path,
@@ -23,15 +23,7 @@ pub unsafe extern "C" fn dealloc(ptr: *mut u8, len: usize) {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn get_compatible_games() -> *const c_char {
-    let str = "Cyberpunk 2077".to_string();
-    let c_str = CString::new(str).expect("Should be convertible");
-    c_str.as_ptr()
-}
-
-#[unsafe(no_mangle)]
 pub unsafe extern "C" fn restructure(path: *const c_char) {
-    println!("=========== BEGINNING RESTRUCT ===========");
     let c_path: String;
     unsafe {
         c_path = CStr::from_ptr(path).to_str().unwrap().to_owned();
@@ -63,7 +55,13 @@ pub unsafe extern "C" fn restructure(path: *const c_char) {
             continue;
         }
 
-        for glob_path in paths.unwrap() {
+        let paths = paths.unwrap();
+
+        // TODO: Add a path count to prevent files from being merged in case some modders added
+        // folders such as EBB, Vanilla... Paths.count() takes the ownership and clone() does not
+        // exist for Paths
+
+        for glob_path in paths {
             if let Err(e) = glob_path {
                 eprintln!("[Err] Could not retrieve the glob path: {e}");
                 continue;
@@ -178,5 +176,4 @@ pub unsafe extern "C" fn restructure(path: *const c_char) {
             }
         }
     }
-    println!("============== END RESTRUCT ==============");
 }
