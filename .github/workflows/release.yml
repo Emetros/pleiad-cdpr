@@ -31,4 +31,4 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        gh release create --generate-notes ./pleiad_cdpr/pleiad_cdpr.wasm
+        gh release create --generate-notes ./target/wasm32-wasip1/release/pleiad_cdpr.wasm
