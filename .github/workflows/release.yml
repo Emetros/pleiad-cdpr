@@ -25,10 +25,12 @@ jobs:
     - name: Download release artifact
       uses: actions/download-artifact@v5
       with:
+        contents: write
+        workflows: write
         name: pleiad_cdpr
         path: ./pleiad_cdpr
     - name: Publish built binary to GitHub releases
+      run: |
+        gh release create --generate-notes ./pleiad_cdpr/leiad_cdpr.wasm
       env:
         GH_TOKEN: ${{ github.token }}
-      run: |
-        gh release create --generate-notes ./target/wasm32-wasip1/release/pleiad_cdpr.wasm
