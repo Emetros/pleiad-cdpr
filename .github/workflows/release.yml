@@ -3,6 +3,9 @@ name: Build release
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 env:
   CARGO_TERM_COLOR: always
 
@@ -15,22 +18,8 @@ jobs:
       run: rustup target add wasm32-wasip1
     - name: Build
       run: cargo build --target wasm32-wasip1 --release
-    - name: Upload release artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: pleiad_cdpr
-        path: target/wasm32-wasip1/release/pleiad_cdpr.wasm
-
-    - uses: actions/checkout@v6
-    - name: Download release artifact
-      uses: actions/download-artifact@v5
-      with:
-        contents: write
-        workflows: write
-        name: pleiad_cdpr
-        path: ./pleiad_cdpr
-    - name: Publish built binary to GitHub releases
+    - name: Publish wasm build to Github Release
       run: |
-        gh release create --generate-notes ./pleiad_cdpr/pleiad_cdpr.wasm
+        gh release create --generate-notes ./target/wasm32-wasip1/release/pleiad_cdpr.wasm
       env:
         GH_TOKEN: ${{ github.token }}
