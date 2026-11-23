@@ -18,8 +18,9 @@ jobs:
       run: rustup target add wasm32-wasip1
     - name: Build
       run: cargo build --target wasm32-wasip1 --release
-    - name: Publish wasm build to Github Release
+    - name: Publish built wasm plugin to releases
       run: |
-        gh release create --generate-notes ./target/wasm32-wasip1/release/pleiad_cdpr.wasm
+        VERSION="v$(grep '^version = ' Cargo.toml | sed -E 's/version = "(.*)"/\1/')"
+        gh release create "$VERSION" --generate-notes target/wasm32-wasip1/release/pleiad_cdpr.wasm
       env:
         GH_TOKEN: ${{ github.token }}
