@@ -12,11 +12,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Dependance
-      run: rustup target add wasm32-wasip1
+      run: rustup target add wasm32-wasip2
     - name: Build
-      run: cargo build --target wasm32-wasip1 --release
+      run: cargo build --target wasm32-wasip2 --release
     - name: Upload release artifact
       uses: actions/upload-artifact@v4
       with:
         name: pleiad_cdpr
-        path: target/wasm32-wasip1/release/pleiad_cdpr.wasm
+        path: target/wasm32-wasip2/release/pleiad_cdpr.wasm

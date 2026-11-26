@@ -15,12 +15,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Dependance
-      run: rustup target add wasm32-wasip1
+      run: rustup target add wasm32-wasip2
     - name: Build
-      run: cargo build --target wasm32-wasip1 --release
+      run: cargo build --target wasm32-wasip2 --release
     - name: Publish built wasm plugin to releases
       run: |
         VERSION="v$(grep '^version = ' Cargo.toml | sed -E 's/version = "(.*)"/\1/')"
-        gh release create "$VERSION" --generate-notes target/wasm32-wasip1/release/pleiad_cdpr.wasm
+        gh release create "$VERSION" --generate-notes target/wasm32-wasip2/release/pleiad_cdpr.wasm
       env:
         GH_TOKEN: ${{ github.token }}

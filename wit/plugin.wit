@@ -1,0 +1,14 @@
+package pleiad:host@0.1.0;
+
+interface installer {
+    download: func(url: string, filename: string, dest: string);
+    run-script: func(path: string);
+}
+
+world plugin {
+    import installer;
+
+    export restructure: func(src: string);
+    export pre-hook: func();
+    export post-hook: func();
+}
